@@ -21,4 +21,4 @@ These benchmarks exist, to answer the following:
 
 This suite doesn't use Sightglass's CLI to run the benchmarks. Instead it uses Criterion for Rust benchmarks and JavaScript's `Performance` API for JavaScript benchmarks.
 
-Sightglass uses Wasmtime's Benchmark API which intentionally uses a Shuffling Allocator to ensure statistically meaningful results, but make it unsuitable for rough comparisons between different engines.
+Sightglass uses Wasmtime's Benchmark API which intentionally uses a Shuffling Allocator to ensure statistically meaningful results, but make it unsuitable for comparisons between different engines.
