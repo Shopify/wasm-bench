@@ -1574,6 +1574,7 @@ name = "wasm-bench"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "cap-std",
  "criterion",
  "precision",
  "target-lexicon",

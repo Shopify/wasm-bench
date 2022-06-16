@@ -13,6 +13,7 @@ wasi-common = "=0.37.0"
 target-lexicon = "0.12.4"
 anyhow = "1.0.57"
 precision = "0.1.14"
+cap-std = "0.24.4"
 
 [dev-dependencies]
 criterion = "0.3.5"
