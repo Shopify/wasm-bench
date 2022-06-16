@@ -1,0 +1,3 @@
+[submodule "sightglass"]
+	path = sightglass
+	url = https://github.com/bytecodealliance/sightglass.git
