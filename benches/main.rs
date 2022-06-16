@@ -45,6 +45,7 @@ fn compilation(c: &mut Criterion) {
     let vm: VM = Default::default();
 
     def_compile_bench!(c, "pulldown-cmark", vm);
+    def_compile_bench!(c, "shootout-fib2", vm);
 }
 
 fn execution(c: &mut Criterion) {
