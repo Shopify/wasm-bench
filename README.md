@@ -2,7 +2,7 @@
 
 A WebAssembly benchmarking suite, built on top of the [Sightglass suite](https://github.com/bytecodealliance/sightglass/tree/main/benchmarks-next).
 
-This suite **is not a rigurous benchmark across WebAssembly engines**; the intention is to provide a simple approximation and a _rough_ comparison between compilation and execution times of various WebAssembly modules using different WebAssembly compilers (Baseline, Optimizing).
+This suite **is not a rigorous benchmark across WebAssembly engines**; the intention is to provide a simple approximation and a _rough_ comparison between compilation and execution times of various WebAssembly modules using different WebAssembly compilers (Baseline, Optimizing).
 
 ## Compilers
 
