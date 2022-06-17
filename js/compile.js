@@ -20,8 +20,10 @@ var start = performance.now();
 var m = new WebAssembly.Module(bytecode);
 var end = performance.now() - start;
 
+console.log(m);
+
 console.log(`
   Compiler: ${wasmCompileMode()},
-  Time: ${end}ms
+  Compilation took: ${end}ms
 `);
 

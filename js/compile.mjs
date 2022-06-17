@@ -13,6 +13,6 @@ var m = new WebAssembly.Module(bytecode);
 console.log(m);
 var tt = performance.now() - start;
 
-console.log(`${tt}ms`);
+console.info(`Compilation took: ${tt}ms`);
 
 

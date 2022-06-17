@@ -1,3 +1,6 @@
 [submodule "sightglass"]
 	path = sightglass
 	url = https://github.com/bytecodealliance/sightglass.git
+[submodule "gecko-dev"]
+	path = gecko-dev
+	url = https://github.com/mozilla/gecko-dev.git
