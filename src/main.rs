@@ -2,6 +2,7 @@ use anyhow::{Result, Context};
 use std::{fs, env, path::{PathBuf, Path}, collections::HashMap};
 use log::info;
 use std::process::Command;
+
 use precision::{Precision, Config};
 use structopt::StructOpt;
 use wasm_bench::VM;
@@ -56,6 +57,7 @@ fn main() {
 
             compile_with_liftoff(&opts.name).unwrap();
             compile_with_rabaldr(&opts.name).unwrap();
+            exec_with_liftoff(&opts.name).unwrap();
         }
     }
 }
@@ -118,6 +120,19 @@ fn exec(vm: &VM, name: &str, precision: &Precision) -> Result<()> {
     Ok(())
 }
 
+fn exec_with_liftoff(name: &str) -> Result<()> {
+    info!("====== [Liftoff] Starting execution ======");
+    let cwd = env::current_dir()?;
+    let bench_path = path_from_name(name);
+    let js_path = cwd.join("js").join("execute.mjs");
+    let js_path = js_path.to_str().context("Could not convert to &str")?;
+    assert!(env::set_current_dir(bench_path).is_ok());
+    cmd(&["node", "--experimental-wasi-unstable-preview1", "--liftoff", "--no-wasm-tier-up", js_path, "benchmark.wasm"], None, None);
+    assert!(env::set_current_dir(cwd).is_ok());
+
+    Ok(())
+}
+
 fn compile_with_liftoff(name: &str) -> Result<()> {
     info!("====== [Liftoff] Starting compilation ======");
     let path = path_from_name(name).join("benchmark.wasm");
@@ -144,8 +159,6 @@ fn compile_with_rabaldr(name: &str) -> Result<()> {
 
     Ok(())
 }
-
-
 
 fn setup_gecko() -> Result<()> {
     let cwd = env::current_dir()?;
