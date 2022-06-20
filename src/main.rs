@@ -127,7 +127,7 @@ fn exec_with_liftoff(name: &str) -> Result<()> {
     let js_path = cwd.join("js").join("execute.mjs");
     let js_path = js_path.to_str().context("Could not convert to &str")?;
     assert!(env::set_current_dir(bench_path).is_ok());
-    cmd(&["node", "--experimental-wasi-unstable-preview1", "--liftoff", "--no-wasm-tier-up", js_path, "benchmark.wasm"], None, None);
+    cmd(&["node", "--experimental-wasi-unstable-preview1", "--no-wasm-tier-up", "--liftoff", js_path, "benchmark.wasm"], None, None);
     assert!(env::set_current_dir(cwd).is_ok());
 
     Ok(())
