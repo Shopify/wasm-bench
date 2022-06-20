@@ -1,6 +1,6 @@
 // V8
-// * With liftoff only: node --liftoff --no-wasm-tier-up index.mjs
-// * With turbofan only: node --no-liftoff --no-wasm-tier-up index.mjs
+// * With liftoff only: node --experimental-wasi-unstable-preview1 --liftoff --no-wasm-tier-up index.mjs
+// * With turbofan only: node --experimental-wasi-unstable-preview1 --no-liftoff --no-wasm-tier-up index.mjs
 //
 import * as fs from 'fs';
 import * as path from 'path';
