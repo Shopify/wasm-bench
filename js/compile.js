@@ -12,18 +12,22 @@
 // ac_add_options --enable-cranelift
 // ac_add_options --enable-spidermonkey-telemetry
 // 
-
+var ITERATIONS = 30;
+var elapsed = 0;
 var path = os.getenv("WASM_PATH");
 var bytecode = os.file.readFile(path, 'binary');
 
-var start = performance.now();
-var m = new WebAssembly.Module(bytecode);
-var end = performance.now() - start;
+for (var i = 0; i < ITERATIONS; i++) {
+  var start = performance.now();
+  var m = new WebAssembly.Module(bytecode);
+  console.log(m);
+  var end = performance.now() - start;
+  elapsed += end;
+}
 
-console.log(m);
 
 console.log(`
   Compiler: ${wasmCompileMode()},
-  Compilation took: ${end}ms
+  Compilation took: ${elapsed / ITERATIONS}ms
 `);
 

@@ -1,0 +1,22 @@
+{
+  "name": "wasm-bench",
+  "version": "1.0.0",
+  "description": "A WebAssembly benchmarking suite, built on top of the [Sightglass suite](https://github.com/bytecodealliance/sightglass/tree/main/benchmarks-next).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/wasm-bench.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shopify/wasm-bench/issues"
+  },
+  "homepage": "https://github.com/Shopify/wasm-bench#readme",
+  "dependencies": {
+    "nanobench": "^2.1.1"
+  }
+}
