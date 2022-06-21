@@ -7,7 +7,7 @@ import * as path from 'path';
 import { WASI } from 'wasi';
 
 
-fs.open('log', 'w+', function(e, fd) {
+fs.open('stdout.log', 'w+', function(e, fd) {
   const wasi = new WASI({
     preopens: {
       '.': '.'
@@ -34,6 +34,9 @@ fs.open('log', 'w+', function(e, fd) {
   wasi.start(instance);
   var tt = performance.now() - start;
 
-  console.info(`Execution took: ${tt}ms`);
+  console.info(`
+    Compiler: Liftoff
+    Execution took: ${tt}ms
+  `);
 });
 

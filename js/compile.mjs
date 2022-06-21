@@ -10,9 +10,12 @@ var bytecode = fs.readFileSync(path);
 
 var start = performance.now();
 var m = new WebAssembly.Module(bytecode);
-console.log(m);
 var tt = performance.now() - start;
+console.log(m);
 
-console.info(`Compilation took: ${tt}ms`);
+console.info(`
+  Compiler: Liftoff
+  Compilation took: ${tt}ms`
+);
 
 
