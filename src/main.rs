@@ -1,9 +1,13 @@
-use anyhow::{Result, Context};
-use std::{fs, env, path::{PathBuf, Path}, collections::HashMap};
+use anyhow::{Context, Result};
 use log::info;
 use std::process::Command;
+use std::{
+    collections::HashMap,
+    env, fs,
+    path::{Path, PathBuf},
+};
 
-use precision::{Precision, Config};
+use precision::{Config, Precision};
 use structopt::StructOpt;
 use wasm_bench::VM;
 
@@ -12,19 +16,19 @@ const BENCH_ROOT: &'static str = "sightglass/benchmarks-next/";
 #[derive(StructOpt)]
 struct Opt {
     #[structopt(subcommand)]
-    commands: Commands
+    commands: Commands,
 }
 
 #[derive(StructOpt)]
 enum Commands {
     SetupGecko(SetupGeckoOpts),
-    Bench(BenchOpts)
+    Bench(BenchOpts),
 }
 
 #[derive(StructOpt)]
 struct SetupGeckoOpts {
     #[structopt(long, default_value = "release")]
-    profile: String,
+    _profile: String,
 }
 
 #[derive(StructOpt)]
@@ -32,37 +36,49 @@ struct BenchOpts {
     #[structopt(long)]
     name: String,
     #[structopt(long)]
-    no_criterion: bool,
+    time_stats: bool,
+    #[structopt(long)]
+    fuel: bool,
+    #[structopt(long)]
+    js: bool,
 }
 
 fn main() {
     env_logger::init();
     let opt = Opt::from_args();
-    let vm: VM = Default::default();
     let precision = Precision::new(Config::default()).unwrap();
 
     match opt.commands {
         Commands::SetupGecko { .. } => {
             setup_gecko().unwrap();
-        },
+        }
         Commands::Bench(opts) => {
-            if opts.no_criterion {
+            if opts.fuel {
+                let vm = VM::with_fuel();
                 let bytes = compile(&vm, &opts.name, &precision).unwrap();
                 info!("Machine code size: {} bytes", bytes.len());
                 exec(&vm, &opts.name, &precision).unwrap();
-            } else {
+            }
+
+            if opts.time_stats {
                 info!("[Cranelift] Starting benchmark");
                 cmd(&["cargo", "bench", "--", &opts.name], None, None);
             }
 
-            compile_with_liftoff(&opts.name).unwrap();
-            compile_with_rabaldr(&opts.name).unwrap();
-            exec_with_liftoff(&opts.name).unwrap();
+            if opts.js {
+                compile_with_liftoff(&opts.name).unwrap();
+                compile_with_rabaldr(&opts.name).unwrap();
+                exec_with_liftoff(&opts.name).unwrap();
+            }
         }
     }
 }
 
-fn cmd(command: &[&str], working_directory: Option<PathBuf>, env: Option<&HashMap<String, String>>) {
+fn cmd(
+    command: &[&str],
+    working_directory: Option<PathBuf>,
+    env: Option<&HashMap<String, String>>,
+) {
     info!("> {}", command.join(" "));
     let mut cmd = Command::new(command[0]);
     cmd.args(&command[1..]);
@@ -82,9 +98,8 @@ fn cmd(command: &[&str], working_directory: Option<PathBuf>, env: Option<&HashMa
 fn compile(vm: &VM, name: &str, precision: &Precision) -> Result<Vec<u8>> {
     info!("====== [Cranelift] Starting compilation ======");
 
-    let bytecode = fs::read(
-        path_from_name(name).join("benchmark.wasm")
-    ).with_context(|| format!("Benchmark not found: {}", name))?;
+    let bytecode = fs::read(path_from_name(name).join("benchmark.wasm"))
+        .with_context(|| format!("Benchmark not found: {}", name))?;
 
     let start = precision.now();
     let code = vm.compile(&bytecode).unwrap();
@@ -115,6 +130,9 @@ fn exec(vm: &VM, name: &str, precision: &Precision) -> Result<()> {
     vm.exec(&mut store, &module)?;
     let end = precision.now() - start;
     info!("Execution took: {} ms", end.as_millis(precision));
+    if let Some(consumed) = store.fuel_consumed() {
+        info!("Execution consumed {} fuel", consumed);
+    }
     assert!(env::set_current_dir(cwd).is_ok());
 
     Ok(())
@@ -127,7 +145,18 @@ fn exec_with_liftoff(name: &str) -> Result<()> {
     let js_path = cwd.join("js").join("execute.mjs");
     let js_path = js_path.to_str().context("Could not convert to &str")?;
     assert!(env::set_current_dir(bench_path).is_ok());
-    cmd(&["node", "--experimental-wasi-unstable-preview1", "--no-wasm-tier-up", "--liftoff", js_path, "benchmark.wasm"], None, None);
+    cmd(
+        &[
+            "node",
+            "--experimental-wasi-unstable-preview1",
+            "--no-wasm-tier-up",
+            "--liftoff",
+            js_path,
+            "benchmark.wasm",
+        ],
+        None,
+        None,
+    );
     assert!(env::set_current_dir(cwd).is_ok());
 
     Ok(())
@@ -136,9 +165,22 @@ fn exec_with_liftoff(name: &str) -> Result<()> {
 fn compile_with_liftoff(name: &str) -> Result<()> {
     info!("====== [Liftoff] Starting compilation ======");
     let path = path_from_name(name).join("benchmark.wasm");
-    let path = path.as_os_str().to_str().context("Couldn't convert to str")?;
+    let path = path
+        .as_os_str()
+        .to_str()
+        .context("Couldn't convert to str")?;
 
-    cmd(&["node", "--liftoff", "--no-wasm-tier-up", "js/compile.mjs", &path,], None, None);
+    cmd(
+        &[
+            "node",
+            "--liftoff",
+            "--no-wasm-tier-up",
+            "js/compile.mjs",
+            &path,
+        ],
+        None,
+        None,
+    );
 
     Ok(())
 }
@@ -148,14 +190,30 @@ fn compile_with_rabaldr(name: &str) -> Result<()> {
     let cwd = env::current_dir()?;
     let gecko_path = cwd.join("gecko-dev");
     let source_path = cwd.join("js").join("compile.js");
-    let source_path = source_path.as_os_str().to_str().context("Could not convert to &str")?;
+    let source_path = source_path
+        .as_os_str()
+        .to_str()
+        .context("Could not convert to &str")?;
     let path = cwd.join(path_from_name(name).join("benchmark.wasm"));
-    let path = path.as_os_str().to_str().context("Couldn't convert to &str")?;
+    let path = path
+        .as_os_str()
+        .to_str()
+        .context("Couldn't convert to &str")?;
 
     let mut env = HashMap::new();
     env.insert("WASM_PATH".into(), path.into());
 
-    cmd(&["./mach", "run", "--", "--wasm-compiler=baseline", &source_path], Some(gecko_path), Some(&env));
+    cmd(
+        &[
+            "./mach",
+            "run",
+            "--",
+            "--wasm-compiler=baseline",
+            &source_path,
+        ],
+        Some(gecko_path),
+        Some(&env),
+    );
 
     Ok(())
 }
@@ -163,11 +221,17 @@ fn compile_with_rabaldr(name: &str) -> Result<()> {
 fn setup_gecko() -> Result<()> {
     let cwd = env::current_dir()?;
     let moz_config_path = cwd.join("mozconfigs").join("release");
-    let moz_config_path = moz_config_path.to_str().context("Could not convert to String")?;
+    let moz_config_path = moz_config_path
+        .to_str()
+        .context("Could not convert to String")?;
     let mut env = HashMap::new();
     env.insert("MOZCONFIG".into(), moz_config_path.into());
 
-    cmd(&["./mach", "build"], Some(cwd.join("gecko-dev")), Some(&env));
+    cmd(
+        &["./mach", "build"],
+        Some(cwd.join("gecko-dev")),
+        Some(&env),
+    );
 
     Ok(())
 }
