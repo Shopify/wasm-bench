@@ -9,7 +9,7 @@ use std::{
 
 use precision::{Config, Precision};
 use structopt::StructOpt;
-use wasm_bench::VM;
+use wasm_bench::{VMOptions, VM};
 
 const BENCH_ROOT: &'static str = "sightglass/benchmarks-next/";
 
@@ -40,7 +40,11 @@ struct BenchOpts {
     #[structopt(long)]
     fuel: bool,
     #[structopt(long)]
+    epoch_interruption: bool,
+    #[structopt(long)]
     js: bool,
+    #[structopt(long)]
+    single: bool,
 }
 
 fn main() {
@@ -53,8 +57,11 @@ fn main() {
             setup_gecko().unwrap();
         }
         Commands::Bench(opts) => {
-            if opts.fuel {
-                let vm = VM::with_fuel();
+            if opts.single {
+                let mut vm_opts = VMOptions::default();
+                vm_opts.fuel = opts.fuel;
+                vm_opts.epoch_interruption = opts.epoch_interruption;
+                let vm = VM::new(vm_opts);
                 let bytes = compile(&vm, &opts.name, &precision).unwrap();
                 info!("Machine code size: {} bytes", bytes.len());
                 exec(&vm, &opts.name, &precision).unwrap();

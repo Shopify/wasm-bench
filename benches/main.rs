@@ -76,6 +76,14 @@ macro_rules! for_each_bench {
             @compile with_fuel compile_shootout_keccak_with_fuel => shootout_keccak
             @compile default compile_shootout_ed25519 => shootout_ed25519
             @compile with_fuel compile_shootout_ed25519_with_fuel => shootout_ed25519
+            @compile default compile_shootout_random => shootout_random
+            @compile with_fuel compile_shootout_random_with_fuel => shootout_random
+            @compile default compile_shootout_minicsv => shootout_minicsv
+            @compile with_fuel compile_shootout_minicsv_with_fuel => shootout_minicsv
+            @compile default compile_shootout_matrix => shootout_matrix
+            @compile with_fuel compile_shootout_matrix_with_fuel => shootout_matrix
+            @compile default compile_shootout_ratelimit => shootout_ratelimit
+            @compile with_fuel compile_shootout_ratelimit_with_fuel => shootout_ratelimit
 
             @exec default exec_shootout_ed25519 => shootout_ed25519
             @exec with_fuel exec_shootout_ed25519_with_fuel => shootout_ed25519
@@ -91,6 +99,14 @@ macro_rules! for_each_bench {
             @exec with_fuel exec_shootout_base64_with_fuel => shootout_base64
             // @exec default exec_bz2 => bz2
             // @exec with_fuel exec_bz2_with_fuel => bz2
+        @exec default exec_shootout_random => shootout_random
+        @exec with_fuel exec_shootout_random_with_fuel => shootout_random
+            @exec default exec_shootout_minicsv => shootout_minicsv
+            @exec with_fuel exec_shootout_minicsv_with_fuel => shootout_minicsv
+            @exec default exec_shootout_matrix => shootout_matrix
+            @exec with_fuel exec_shootout_matrix_with_fuel => shootout_matrix
+            @exec default exec_shootout_ratelimit => shootout_ratelimit
+            @exec with_fuel exec_shootout_ratelimit_with_fuel => shootout_ratelimit
         }
     };
 }
@@ -140,16 +156,32 @@ criterion_group!(
     exec_shootout_fib2_with_fuel,
     compile_shootout_heapsort,
     compile_shootout_heapsort_with_fuel,
+    compile_shootout_random,
+    compile_shootout_random_with_fuel,
+    compile_shootout_minicsv,
+    compile_shootout_minicsv_with_fuel,
     // Exits with exit code 1
     // exec_shootout_heapsort
     compile_shootout_keccak,
     compile_shootout_keccak_with_fuel,
+    compile_shootout_matrix,
+    compile_shootout_matrix_with_fuel,
+    compile_shootout_ratelimit,
+    compile_shootout_ratelimit_with_fuel,
     exec_shootout_keccak,
     exec_shootout_keccak_with_fuel,
     compile_shootout_ed25519,
     compile_shootout_ed25519_with_fuel,
     exec_shootout_ed25519,
-    exec_shootout_ed25519_with_fuel
+    exec_shootout_ed25519_with_fuel,
+    exec_shootout_random,
+    exec_shootout_random_with_fuel,
+    exec_shootout_minicsv,
+    exec_shootout_minicsv_with_fuel,
+    exec_shootout_matrix,
+    exec_shootout_matrix_with_fuel,
+    exec_shootout_ratelimit,
+    exec_shootout_ratelimit_with_fuel,
 );
 
 criterion_main!(benches);
