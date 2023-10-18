@@ -164,7 +164,7 @@ dependencies = [
  "io-lifetimes 0.7.5",
  "ipnet",
  "maybe-owned",
- "rustix 0.35.13",
+ "rustix 0.35.15",
  "winapi-util",
  "windows-sys 0.36.1",
  "winx",
@@ -190,7 +190,7 @@ dependencies = [
  "io-extras",
  "io-lifetimes 0.7.5",
  "ipnet",
- "rustix 0.35.13",
+ "rustix 0.35.15",
 ]
 
 [[package]]
@@ -201,7 +201,7 @@ checksum = "c3a0524f7c4cff2ea547ae2b652bf7a348fd3e48f76556dc928d8b45ab2f1d50"
 dependencies = [
  "cap-primitives",
  "once_cell",
- "rustix 0.35.13",
+ "rustix 0.35.15",
  "winx",
 ]
 
@@ -627,7 +627,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a267b6a9304912e018610d53fe07115d8b530b160e85db4d2d3a59f3ddde1aec"
 dependencies = [
  "io-lifetimes 0.7.5",
- "rustix 0.35.13",
+ "rustix 0.35.15",
  "windows-sys 0.36.1",
 ]
 
@@ -796,7 +796,7 @@ checksum = "0d508111813f9af3afd2f92758f77e4ed2cc9371b642112c6a48d22eb73105c5"
 dependencies = [
  "hermit-abi 0.2.1",
  "io-lifetimes 0.7.5",
- "rustix 0.35.13",
+ "rustix 0.35.15",
  "windows-sys 0.36.1",
 ]
 
@@ -1244,9 +1244,9 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "0.35.13"
+version = "0.35.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "727a1a6d65f786ec22df8a81ca3121107f235970dc1705ed681d3e6e8b9cd5f9"
+checksum = "413c4d41e2f1b0814c63567d11618483de0bd64f451b452f2ca43896579486ba"
 dependencies = [
  "bitflags",
  "errno",
@@ -1438,7 +1438,7 @@ dependencies = [
  "cap-fs-ext",
  "cap-std",
  "io-lifetimes 0.7.5",
- "rustix 0.35.13",
+ "rustix 0.35.15",
  "windows-sys 0.36.1",
  "winx",
 ]
@@ -1621,7 +1621,7 @@ dependencies = [
  "io-lifetimes 0.7.5",
  "is-terminal",
  "once_cell",
- "rustix 0.35.13",
+ "rustix 0.35.15",
  "system-interface",
  "tracing",
  "wasi-common",
@@ -1639,7 +1639,7 @@ dependencies = [
  "cap-rand",
  "cap-std",
  "io-extras",
- "rustix 0.35.13",
+ "rustix 0.35.15",
  "thiserror",
  "tracing",
  "wiggle",
@@ -1788,7 +1788,7 @@ dependencies = [
  "directories-next",
  "file-per-thread-logger",
  "log",
- "rustix 0.35.13",
+ "rustix 0.35.15",
  "serde",
  "sha2",
  "toml",
@@ -1858,7 +1858,7 @@ checksum = "1075aa43857086ef89afbe87602fe2dae98ad212582e722b6d3d2676bb5ee141"
 dependencies = [
  "cc",
  "cfg-if",
- "rustix 0.35.13",
+ "rustix 0.35.15",
  "wasmtime-asm-macros",
  "windows-sys 0.36.1",
 ]
@@ -1879,7 +1879,7 @@ dependencies = [
  "log",
  "object",
  "rustc-demangle",
- "rustix 0.35.13",
+ "rustix 0.35.15",
  "serde",
  "target-lexicon",
  "thiserror",
@@ -1897,7 +1897,7 @@ checksum = "b2f8f15a81292eec468c79a4f887a37a3d02eb0c610f34ddbec607d3e9022f18"
 dependencies = [
  "object",
  "once_cell",
- "rustix 0.35.13",
+ "rustix 0.35.15",
 ]
 
 [[package]]
@@ -1917,7 +1917,7 @@ dependencies = [
  "memoffset",
  "paste",
  "rand",
- "rustix 0.35.13",
+ "rustix 0.35.15",
  "thiserror",
  "wasmtime-asm-macros",
  "wasmtime-environ",
